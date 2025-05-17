@@ -3,17 +3,21 @@ import { createContext, useContext, useState } from "react";
 const StateContext = createContext({
     curentUser: null,
     token: null,
+    notification: null,
     setUser: () => {},
-    setToken: () => {}
+    setToken: () => {},
+    setNotification: () => {},
 });
 
 export const ContextProvider = ({ children }) => {
-    // const [user, setUser] = useState(null);
-    const [user, setUser] = useState({
-        name: "John Doe",
-    });
+    const [user, setUser] = useState({});
+    const [notification, _setNotification] = useState(null);
     const [token, _setToken] = useState(localStorage.getItem("ACCESS_TOKEN"));
-    // const [token, _setToken] = useState(123);
+
+    const setNotification = (message) => {
+        _setNotification(message);
+        setTimeout(() => _setNotification(''), 5000);
+    }
 
     const setToken = (token) => {
         _setToken(token);
@@ -25,7 +29,7 @@ export const ContextProvider = ({ children }) => {
     }
 
     return (
-        <StateContext.Provider value={{ user, token, setUser, setToken }}>
+        <StateContext.Provider value={{ user, token, setUser, setToken, notification, setNotification }}>
             {children}
         </StateContext.Provider>
     )

@@ -1,27 +1,26 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import axiosClient from "../axios-client";
+import axiosClient from "../axios-client.js";
 import { useStateContext } from "../contexts/ContextProvider.jsx";
 
-export default function UserForm() {
+export default function MeasurementForm() {
     const { id } = useParams();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState(null);
     const {setNotification} = useStateContext();
-    const [user, setUser] = useState({
+    const [measurement, setMeasurement] = useState({
         id: null,
-        name: '',
-        email: '',
-        password: '',
-        password_confirmation: '',
+        amount: null,
+        observation: '',
+        
     });
 
     if (id) {
         useEffect(() => {
             setLoading(true);
-            axiosClient.get(`/users/${id}`).then(({data}) => {
-                setUser(data.user);
+            axiosClient.get(`/measurements/${id}`).then(({data}) => {
+                setMeasurement(data.measurement);
                 setLoading(false);
             }).catch(() => {
                 setLoading(false);
@@ -32,10 +31,10 @@ export default function UserForm() {
     const onSubmit = (ev) => {
         ev.preventDefault();
 
-        if (user.id) {
-            axiosClient.put(`/users/${user.id}`, user).then(({data}) => {
-                setNotification('Usuário atualizado com sucesso!');
-                navigate('/users');
+        if (measurement.id) {
+            axiosClient.put(`/measurements/${measurement.id}`, measurement).then(({data}) => {
+                setNotification('Obra atualizada com sucesso!');
+                navigate('/measurements');
             }).catch(err => {
                 const response = err.response;
                 if (response && response.status === 422) {
@@ -43,9 +42,9 @@ export default function UserForm() {
                 }
             });
         } else {
-            axiosClient.post(`/users`, user).then(({data}) => {
-                setNotification('Usuário criado com sucesso!');
-                navigate('/users');
+            axiosClient.post(`/measurements`, measurement).then(({data}) => {
+                setNotification('Obra criada com sucesso!');
+                navigate('/measurements');
             }).catch(err => {
                 const response = err.response;
                 if (response && response.status === 422) {
@@ -57,7 +56,7 @@ export default function UserForm() {
 
     return (
         <div>
-            {user.id ? <h1>Editando Usuário</h1> : <h1>Novo Usuário</h1>}
+            {measurement.id ? <h1>Editando Obra</h1> : <h1>Nova Obra</h1>}
             <div className="card animated fadeInDown">
                 {loading && <div className="text-center">Carregando...</div>}
                 { errors && (
@@ -69,14 +68,10 @@ export default function UserForm() {
                 )}
                 {!loading && 
                     <form onSubmit={onSubmit}>
-                        <label htmlFor="name"><strong>Nome</strong></label>
-                        <input value={user.name} onChange={ev => setUser({...user, name: ev.target.value})} type="text" placeholder="Nome"/>
-                        <label htmlFor="email"><strong>E-mail</strong></label>
-                        <input value={user.email} onChange={ev => setUser({...user, email: ev.target.value})} type="email" placeholder="E-mail"/>
-                        <label htmlFor="password"><strong>Senha</strong></label>
-                        <input onChange={ev => setUser({...user, password: ev.target.value})} type="password" placeholder="Senha"/>
-                        <label htmlFor="password_confirmation"><strong>Confirma Senha</strong></label>
-                        <input onChange={ev => setUser({...user, password_confirmation: ev.target.value})} type="password" placeholder="Confirma Senha"/>
+                        <label htmlFor="name"><strong>Medida</strong></label>
+                        <input value={measurement.name} onChange={ev => setMeasurement({...measurement, name: ev.target.value})} type="text" placeholder="Nome"/>
+                        <label htmlFor="description"><strong>Descrição</strong></label>
+                        <input value={measurement.description} onChange={ev => setMeasurement({...measurement, description: ev.target.value})} type="text" placeholder="Descrição"/>
                         <button className="btn" type="submit">Salvar</button>
                     </form>
                 }

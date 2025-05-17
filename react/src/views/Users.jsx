@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import axiosClient from "../axios-client";
 import { Link } from "react-router-dom";
+import { useStateContext } from "../contexts/ContextProvider.jsx";
 
 export default function Users() {
     const [user, setUser] = useState([]);
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(false);
+    const { setNotification } = useStateContext();
 
     useEffect(() => {
         getUsers();
@@ -25,6 +27,7 @@ export default function Users() {
     const onDelete = (user) => {
         if (window.confirm('Tem certeza que deseja excluir?')) {
             axiosClient.delete(`/users/${user.id}`).then(() => {
+                setNotification('Usuário excluido com sucesso!');
                 getUsers();
             });
         }
@@ -33,7 +36,7 @@ export default function Users() {
     return (
         <div>
             <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-                <h1>Users</h1>
+                <h1>Usuários</h1>
                 <Link to="/users/new" className="btn-add">Criar Novo</Link>
             </div>
             <div className="card animated fadeInDown">
@@ -73,6 +76,15 @@ export default function Users() {
                                     </tr>
                                 );
                             })}
+                        </tbody>
+                    }
+                    {!users.length && !loading &&
+                        <tbody>
+                            <tr>
+                                <td colSpan="5" className="text-center">
+                                    <span>Nenhum usuário encontrado.</span>
+                                </td>
+                            </tr>
                         </tbody>
                     }
                 </table>

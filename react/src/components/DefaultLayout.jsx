@@ -5,7 +5,7 @@ import axiosClient from "../axios-client.js";
 import axios from "axios";
 
 export default function DefaultLayout() {
-    const {user, token, setUser, setToken} = useStateContext();
+    const {user, token, notification, setUser, setToken} = useStateContext();
 
     if (!token) {
         return <Navigate to="/login" />;
@@ -30,7 +30,8 @@ export default function DefaultLayout() {
         <div id="defaultLayout">
             <aside>
                 <Link to="/dashboard">Dashboard</Link>
-                <Link to="/users">Users</Link>
+                <Link to="/users">Usuários</Link>
+                <Link to="/constructions">Obras</Link>
             </aside>
             <div className="content">
                 <header>
@@ -46,6 +47,11 @@ export default function DefaultLayout() {
                     <Outlet />
                 </main>
             </div>
+            {notification &&
+                <div className="notification animated fadeInDown">
+                    {notification}
+                </div>
+            }
         </div>
     );
 }
