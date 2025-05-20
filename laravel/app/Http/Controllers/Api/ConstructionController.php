@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Construction;
+use Illuminate\Http\Request;
+use App\Traits\ApiQueryBuilder;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ConstructionResource;
@@ -11,17 +13,49 @@ use App\Http\Requests\UpdateConstructionRequest;
 
 class ConstructionController extends Controller
 {
+    use ApiQueryBuilder;
+
+    protected function getCustomFilters()
+    {
+        return [
+            // 'key' => function ($query, $key, $input) {
+
+            // },
+        ];
+    }
+
+    protected function getCustomSorts()
+    {
+        return [
+            'latest_measurement' => function ($query, $direction) {
+                $query->orderBy(
+                    \DB::table('measurements')
+                        ->select('measured_at')
+                        ->whereColumn('measurements.construction_id', 'constructions.id')
+                        ->latest('measured_at')
+                        ->limit(1),
+                    'desc'
+                );
+                return $query;
+            },
+        ];
+    }
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         return ConstructionResource::collection(Construction::query()->orderBy('id', 'desc')->paginate(10));
     }
 
-    public function get()
+    public function get(Request $request)
     {
-        $constructions = Construction::all();
+        $query = Construction::query();
+        $query = $this->applyIncludes($query, $request);
+        $query = $this->applyCustomFilters($query, $request);
+        $query = $this->applySorting($query, $request);
+        $constructions = $query->paginate(10);
 
         return response()->json([
             'error' => false,
@@ -32,9 +66,12 @@ class ConstructionController extends Controller
     public function find($id)
     {
         $construction = Construction::with('measurements.unit.unitCategory')->find($id);
+        $measurements = $construction->measurements()->paginate(10);
+
         return response()->json([
             'error' => false,
             'construction' => $construction,
+            'measurements' => $measurements,
         ], 200);
     }
 

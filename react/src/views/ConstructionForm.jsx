@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import axiosClient from "../axios-client.js";
+import axiosClient from "../api/axios-client.js";
 import { useStateContext } from "../contexts/ContextProvider.jsx";
+import { getConstruction } from "../services/ConstructionService.js";
 
 export default function ConstructionForm() {
     const { id } = useParams();
@@ -15,17 +16,18 @@ export default function ConstructionForm() {
         description: '',
     });
 
-    if (id) {
-        useEffect(() => {
-            setLoading(true);
-            axiosClient.get(`/constructions/${id}`).then(({data}) => {
+    useEffect(() => {
+        if (!id) return;
+        setLoading(true);
+        getConstruction(id, {})
+            .then(({ data }) => {
                 setConstruction(data.construction);
                 setLoading(false);
-            }).catch(() => {
+            })
+            .catch(() => {
                 setLoading(false);
             });
-        }, []);
-    }
+    }, [id]);
 
     const onSubmit = (ev) => {
         ev.preventDefault();
@@ -71,7 +73,7 @@ export default function ConstructionForm() {
                         <input value={construction.name} onChange={ev => setConstruction({...construction, name: ev.target.value})} type="text" placeholder="Nome"/>
                         <label htmlFor="description"><strong>Descrição</strong></label>
                         <input value={construction.description} onChange={ev => setConstruction({...construction, description: ev.target.value})} type="text" placeholder="Descrição"/>
-                        <button className="btn" type="submit">Salvar</button>
+                        <button className="btn mt-3" type="submit">Salvar</button>
                     </form>
                 }
             </div>

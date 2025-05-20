@@ -54,8 +54,12 @@ const router = createBrowserRouter([
                 element: <ConstructionMeasurements key="constructionMeasurements" />
             },
             {
-                path: "/constructions/:id/measurements/new",
+                path: "/constructions/:constructionId/measurements/new",
                 element: <MeasurementForm key="measurementCreate" />
+            },
+            {
+                path: "/constructions/:constructionId/measurements/:id",
+                element: <MeasurementForm key="measurementUpdate" />
             },
         ]
     },

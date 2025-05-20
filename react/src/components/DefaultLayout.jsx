@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, Navigate, Outlet } from "react-router-dom";
 import { useStateContext } from "../contexts/ContextProvider.jsx";
-import axiosClient from "../axios-client.js";
+import axiosClient from "../api/axios-client.js";
 import axios from "axios";
 
 export default function DefaultLayout() {
@@ -36,7 +36,7 @@ export default function DefaultLayout() {
             <div className="content">
                 <header>
                     <div>
-                        Header
+                        {/* Header */}
                     </div>
                     <div>
                         { user.name }

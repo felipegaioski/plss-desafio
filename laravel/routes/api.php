@@ -18,6 +18,14 @@ Route::middleware('auth:sanctum')->group(function() {
 
     // Measurements
     Route::apiResource('/measurements', 'App\Http\Controllers\Api\MeasurementController');
+    Route::get('/measurements', 'App\Http\Controllers\Api\MeasurementController@get');
+    Route::get('/measurements/find/{id}', 'App\Http\Controllers\Api\MeasurementController@find');
+
+    // Units
+    Route::get('/units', 'App\Http\Controllers\Api\UnitController@get');
+
+    // Unit Categories
+    Route::get('/unit-categories', 'App\Http\Controllers\Api\UnitCategoryController@get');
 });
 
 Route::post('/signup', 'App\Http\Controllers\Api\AuthController@signup');

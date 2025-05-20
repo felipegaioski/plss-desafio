@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import axiosClient from "../axios-client";
+import axiosClient from "../api/axios-client.js";
 import { Link } from "react-router-dom";
 import { useStateContext } from "../contexts/ContextProvider.jsx";
+import { getUsers } from "../services/UserService.js";
 
 export default function Users() {
     const [user, setUser] = useState([]);
@@ -10,18 +11,16 @@ export default function Users() {
     const { setNotification } = useStateContext();
 
     useEffect(() => {
-        getUsers();
+        fetchUsers();
     }, []);
 
-    const getUsers = () => {
+    const fetchUsers = () => {
         setLoading(true);
-        axiosClient.get('/users').then(({data}) => {
-            console.log(data);
-            setUsers(data.data);
-            setLoading(false);
-        }).catch(() => {
-            setLoading(false);
-        });
+        getUsers({}, [])
+            .then(({ data }) => {
+                setUsers(data.data);
+            })
+        .finally(() => setLoading(false));
     };
 
     const onDelete = (user) => {

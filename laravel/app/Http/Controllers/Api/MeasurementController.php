@@ -2,13 +2,27 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Models\Measurement;
+use Illuminate\Http\Request;
+use App\Traits\ApiQueryBuilder;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreMeasurementRequest;
 use App\Http\Requests\UpdateMeasurementRequest;
 
 class MeasurementController extends Controller
 {
+    use ApiQueryBuilder;
+
+    protected function getCustomFilters()
+    {
+        return [
+            'construction_id' => function ($query, $key, $input) {
+                return $query->where('construction_id', $input);
+            },
+        ];
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -26,9 +40,31 @@ class MeasurementController extends Controller
         return response('', 200);
     }
 
+    public function get(Request $request)
+    {
+        $query = Measurement::query();
+        $query = $this->applyIncludes($query, $request);
+        $query = $this->applyCustomFilters($query, $request);
+        $measurements = $query->orderBy('id', 'desc')->paginate(10);
+
+        return response()->json([
+            'error' => false,
+            'measurements' => $measurements,
+        ], 200);
+    }
+
     public function getByConstructionId($construction_id)
     {
         return response(Measurement::where('construction_id', $construction_id)->get(), 200);
+    }
+
+    public function find($id)
+    {
+        $measurement = Measurement::with('unit.unitCategory')->find($id);
+        return response()->json([
+            'error' => false,
+            'measurement' => $measurement,
+        ], 200);
     }
 
     /**
@@ -36,6 +72,7 @@ class MeasurementController extends Controller
      */
     public function store(StoreMeasurementRequest $request)
     {
+        info($request->toArray());
         try {
             DB::beginTransaction();
 

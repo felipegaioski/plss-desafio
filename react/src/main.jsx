@@ -5,6 +5,7 @@ import './index.css'
 import router from './router.jsx'
 import { RouterProvider } from 'react-router-dom'
 import { ContextProvider } from './contexts/ContextProvider.jsx'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 createRoot(document.getElementById('root')).render(
     <StrictMode>

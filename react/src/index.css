@@ -49,11 +49,11 @@ input:focus {
 .btn-delete {
     font-family: "Roboto", sans-serif;
     outline: 0;
-    background: var(--primary);
+    background: var(--primary) !important;
     border: 0;
     text-decoration: none;
     padding: 15px;
-    color: #FFFFFF;
+    color: #FFFFFF !important;
     font-size: 16px;
     -webkit-transition: all 0.3 ease;
     transition: all 0.3 ease;
@@ -72,16 +72,16 @@ input:focus {
     border-radius: 4px;
 }
 .btn-add {
-    background-color: #00a762;
+    background-color: #00a762 !important;
 }
 .btn-delete {
-    background-color: #b72424;
+    background-color: #b72424 !important;
 }
 
 .btn-logout {
     text-decoration: none;
     padding: 0.75rem 1.5rem;
-    color: #212121;
+    color: #212121 !important;
     transition: all 0.3s;
     border-radius: 6px;
 }
@@ -92,7 +92,7 @@ input:focus {
 .btn:hover,
 .btn:active,
 .btn:focus {
-    background: var(--primary);
+    background: var(--primary) !important;
 }
 
 .text-center {
@@ -128,8 +128,8 @@ table > tbody > tr > td {
 
 .alert {
     padding: 1rem;
-    background-color: #ff4040;
-    color: white;
+    background-color: #ff4040 !important;
+    color: white !important;
     border-radius: 0.5rem;
     margin-bottom: 1rem;
 }

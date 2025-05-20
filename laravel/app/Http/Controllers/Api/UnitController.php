@@ -2,13 +2,30 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Models\Unit;
+use Illuminate\Http\Request;
+use App\Traits\ApiQueryBuilder;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUnitRequest;
 use App\Http\Requests\UpdateUnitRequest;
 
 class UnitController extends Controller
 {
+    use ApiQueryBuilder;
+
+    public function get(Request $request)
+    {
+        $query = Unit::query();
+        $query = $this->applyIncludes($query, $request);
+        $query = $this->applyCustomFilters($query, $request);
+        $units = $query->orderBy('unit_category_id', 'desc')->get();
+
+        return response()->json([
+            'error' => false,
+            'units' => $units,
+        ], 200);
+    }
+    
     /**
      * Display a listing of the resource.
      */

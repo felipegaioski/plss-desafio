@@ -1,27 +1,33 @@
 import { useState, useEffect } from "react";
-import axiosClient from "../axios-client.js";
+import axiosClient from "../api/axios-client.js";
 import { Link } from "react-router-dom";
 import { useStateContext } from "../contexts/ContextProvider.jsx";
+import { getConstructions } from "../services/ConstructionService.js";
 
 export default function Constructions() {
-    const [construction, setConstruction] = useState([]);
+    const [construction, setConstruction] = useState(null);
     const [constructions, setConstructions] = useState([]);
+    const [pagination, setPagination] = useState({});
     const [loading, setLoading] = useState(false);
     const { setNotification } = useStateContext();
 
     useEffect(() => {
-        getConstructions();
+        fetchConstructions();
     }, []);
 
-    const getConstructions = () => {
+    const fetchConstructions = (page = 1) => {
         setLoading(true);
-        axiosClient.get('/constructions').then(({data}) => {
-            console.log(data);
-            setConstructions(data.constructions);
-            setLoading(false);
-        }).catch(() => {
-            setLoading(false);
-        });
+        getConstructions({ page }, ['latest_measurement'], ['latest_measurement'])
+            .then(({ data }) => {
+                setConstructions(data.constructions.data);
+                setPagination({
+                    currentPage: data.constructions.current_page,
+                    lastPage: data.constructions.last_page,
+                    perPage: data.constructions.per_page,
+                    total: data.constructions.total,
+                });
+            })
+            .finally(() => setLoading(false));
     };
 
     const onDelete = (construction) => {
@@ -92,6 +98,10 @@ export default function Constructions() {
                         </tbody>
                     }
                 </table>
+            </div>
+            <div className="pagination mt-3 flex justify-center text-center">
+                <button onClick={() => fetchConstructions(pagination.currentPage - 1)} disabled={pagination.currentPage === 1}>&laquo;</button>
+                <button onClick={() => fetchConstructions(pagination.currentPage + 1)} disabled={pagination.currentPage === pagination.lastPage}>&raquo;</button>
             </div>
         </div>
     );

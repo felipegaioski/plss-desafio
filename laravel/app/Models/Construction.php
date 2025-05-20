@@ -19,5 +19,10 @@ class Construction extends Model
     {
         return $this->hasMany(Measurement::class);
     }
+  
+    public function latest_measurement()
+    {
+        return $this->hasOne(Measurement::class)->latestOfMany('measured_at');
+    }
 
 }

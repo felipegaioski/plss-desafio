@@ -9,6 +9,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class MeasurementResource extends JsonResource
 {
+    public static $wrap = 'measurement';
+
     /**
      * Transform the resource into an array.
      *

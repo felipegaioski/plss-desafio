@@ -29,4 +29,19 @@ class UpdateMeasurementRequest extends FormRequest
             'measured_at' => ['required', 'date'],
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'amount.required' => 'O campo "Medida" é obrigatório.',
+            'amount.numeric' => 'O campo "Medida" deve ser um número.',
+            'amount.min' => 'O campo "Medida" deve ser maior que 0.',
+            'unit_id.required' => 'O campo unidade é obrigatório.',
+            'unit_id.exists' => 'Unidade inválida',
+            'construction_id.required' => 'O campo "Obra" é obrigatório.',
+            'construction_id.exists' => 'Obra inválida.',
+            'measured_at.required' => 'O campo "Data de medição" é obrigatório.',
+            'measured_at.date' => 'Data de medição inválida.',
+        ];
+    }
 }
