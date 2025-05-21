@@ -12,7 +12,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::apiResource('/users', 'App\Http\Controllers\Api\UserController');
 
     // Constructions
-    // Route::apiResource('/constructions', 'App\Http\Controllers\Api\ConstructionController');
+    Route::apiResource('/constructions', 'App\Http\Controllers\Api\ConstructionController');
     Route::get('/constructions', 'App\Http\Controllers\Api\ConstructionController@get');
     Route::get('/constructions/{id}', 'App\Http\Controllers\Api\ConstructionController@find');
 
@@ -26,7 +26,12 @@ Route::middleware('auth:sanctum')->group(function() {
 
     // Unit Categories
     Route::get('/unit-categories', 'App\Http\Controllers\Api\UnitCategoryController@get');
+
+    // Audits
+    Route::get('/audits', '\App\Http\Controllers\Api\AuditController@index');
+
 });
 
 Route::post('/signup', 'App\Http\Controllers\Api\AuthController@signup');
 Route::post('/login', 'App\Http\Controllers\Api\AuthController@login');
+Route::post('/refresh', 'App\Http\Controllers\Api\AuthController@refresh');

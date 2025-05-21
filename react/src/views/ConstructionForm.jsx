@@ -21,7 +21,13 @@ export default function ConstructionForm() {
         setLoading(true);
         getConstruction(id, {})
             .then(({ data }) => {
-                setConstruction(data.construction);
+                console.log(data);
+                if (data.construction) {
+                    setConstruction(data.construction);
+                } else {
+                    setConstruction(data);
+                }
+                
                 setLoading(false);
             })
             .catch(() => {
@@ -57,7 +63,7 @@ export default function ConstructionForm() {
 
     return (
         <div>
-            {construction.id ? <h1>Editando Obra</h1> : <h1>Nova Obra</h1>}
+            { construction.id ? <h1>Editando Obra</h1> : <h1>Nova Obra</h1>}
             <div className="card animated fadeInDown">
                 {loading && <div className="text-center">Carregando...</div>}
                 { errors && (

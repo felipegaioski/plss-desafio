@@ -5,9 +5,12 @@ namespace App\Models;
 use App\Models\Unit;
 use App\Models\Construction;
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class Measurement extends Model
+class Measurement extends Model implements Auditable
 {
+    use \OwenIt\Auditing\Auditable;
+
     protected $fillable = [
         'amount',
         'construction_id',
@@ -15,6 +18,8 @@ class Measurement extends Model
         'observation',
         'measured_at',
     ];
+
+    protected $auditEvents = ['created', 'updated, deleted'];
 
     public $casts = [
         'measured_at' => 'datetime',

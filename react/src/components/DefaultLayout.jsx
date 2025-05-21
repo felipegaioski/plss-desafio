@@ -32,6 +32,7 @@ export default function DefaultLayout() {
                 <Link to="/dashboard">Dashboard</Link>
                 <Link to="/users">Usuários</Link>
                 <Link to="/constructions">Obras</Link>
+                <Link to="/audits">Auditoria</Link>
             </aside>
             <div className="content">
                 <header>

@@ -11,6 +11,7 @@ import Dashboard from "./views/Dashboard";
 import UserForm from "./views/UserForm";
 import ConstructionMeasurements from "./views/ConstructionMeasurements";
 import MeasurementForm from "./views/MeasurementForm";
+import Audits from "./views/Audits";
 
 const router = createBrowserRouter([
     {
@@ -60,6 +61,10 @@ const router = createBrowserRouter([
             {
                 path: "/constructions/:constructionId/measurements/:id",
                 element: <MeasurementForm key="measurementUpdate" />
+            },
+            {
+                path: "/audits",
+                element: <Audits />
             },
         ]
     },
