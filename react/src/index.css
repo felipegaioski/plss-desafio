@@ -212,18 +212,21 @@ table > tbody > tr > td {
 .login-signup-form {
     height: 100vh;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: 2rem;
 }
 
 .login-signup-form .form {
     width: 360px;
     position: relative;
     z-index: 1;
-    background: #FFFFFF;
+    background: var(--color-surface);
     max-width: 360px;
     padding: 34px;
     box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
 }
 
 .login-signup-form .title {

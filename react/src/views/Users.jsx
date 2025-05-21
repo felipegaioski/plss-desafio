@@ -5,6 +5,7 @@ import { useStateContext } from "../contexts/ContextProvider.jsx";
 import { getUsers } from "../services/UserService.js";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter } from '@fortawesome/free-solid-svg-icons';
+import { deleteUser } from "../services/UserService.js";
 
 export default function Users() {
     const [user, setUser] = useState([]);
@@ -18,6 +19,7 @@ export default function Users() {
         name: '',
         email: '',
     });
+    const { user: currentUser } = useStateContext();
 
     useEffect(() => {
         fetchUsers();
@@ -43,7 +45,7 @@ export default function Users() {
 
     const onDelete = (user) => {
         if (window.confirm('Tem certeza que deseja excluir?')) {
-            axiosClient.delete(`/users/${user.id}`).then(() => {
+            deleteUser(user.id).then(() => {
                 setNotification('Usuário excluido com sucesso!');
                 getUsers();
             });
@@ -150,7 +152,9 @@ export default function Users() {
                                         <td>
                                             <Link to={`/users/${user.id}`} className="btn">Editar</Link>
                                             &nbsp;
-                                            <button onClick={ev => onDelete(user)} className="btn-delete">Excluir</button>
+                                            {user.id !== currentUser.id && (
+                                                <button onClick={ev => onDelete(user)} className="btn-delete">Excluir</button>
+                                            )}
                                         </td>
                                     </tr>
                                 );

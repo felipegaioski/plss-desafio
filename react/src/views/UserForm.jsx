@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axiosClient from "../api/axios-client.js";
 import { useStateContext } from "../contexts/ContextProvider.jsx";
+import { createUser, updateUser } from "../services/UserService.js";
 
 export default function UserForm() {
     const { id } = useParams();
@@ -33,7 +34,7 @@ export default function UserForm() {
         ev.preventDefault();
 
         if (user.id) {
-            axiosClient.put(`/users/${user.id}`, user).then(({data}) => {
+            updateUser(id, user).then(({data}) => {
                 setNotification('Usuário atualizado com sucesso!');
                 navigate('/users');
             }).catch(err => {
@@ -43,7 +44,7 @@ export default function UserForm() {
                 }
             });
         } else {
-            axiosClient.post(`/users`, user).then(({data}) => {
+            createUser(user).then(({data}) => {
                 setNotification('Usuário criado com sucesso!');
                 navigate('/users');
             }).catch(err => {

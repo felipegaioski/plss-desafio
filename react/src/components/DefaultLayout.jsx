@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Link, Navigate, Outlet, useNavigate } from "react-router-dom";
 import { useStateContext } from "../contexts/ContextProvider.jsx";
 import axiosClient from "../api/axios-client.js";
-import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 
@@ -34,7 +33,8 @@ export default function DefaultLayout() {
         <div id="defaultLayout">
             <aside>
                 <div className="top-content">
-                    <div className="logo mb-3">
+                    <div className="logo mb-3 d-flex align-items-center gap-2">
+                        <img src="/plss.png" alt="" width="40" height="40"/>
                         <h1>PLSS</h1>
                     </div>
                     <div className="user mb-3">

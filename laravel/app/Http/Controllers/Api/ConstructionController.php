@@ -125,7 +125,7 @@ class ConstructionController extends Controller
             DB::rollBack();
         }
 
-        return response(new ConstructionResource($construction), 200);
+        return response($construction, 200);
     }
 
     /**
@@ -136,6 +136,7 @@ class ConstructionController extends Controller
         try {
             DB::beginTransaction();
 
+            $construction->measurements()->delete();
             $construction->delete();
 
             DB::commit();

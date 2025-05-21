@@ -26,4 +26,19 @@ class LoginRequest extends FormRequest
             'password' => ['required'],
         ];
     }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'email.required' => 'Digite o E-mail',
+            'email.email' => 'E-mail inválido',
+            'email.exists' => 'E-mail não encontrado',
+            'password.required' => 'Digite a Senha',
+        ];
+    }
 }

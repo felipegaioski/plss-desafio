@@ -28,6 +28,8 @@ class DashboardController extends Controller
 
         ];
 
+        info($data);
+
         return response()->json($data);
     }
 }

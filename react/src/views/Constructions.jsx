@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axiosClient from "../api/axios-client.js";
 import { Link } from "react-router-dom";
 import { useStateContext } from "../contexts/ContextProvider.jsx";
-import { getConstructions } from "../services/ConstructionService.js";
+import { deleteConstruction, getConstructions } from "../services/ConstructionService.js";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter } from '@fortawesome/free-solid-svg-icons';
 
@@ -38,10 +38,10 @@ export default function Constructions() {
     };
 
     const onDelete = (construction) => {
-        if (window.confirm('Tem certeza que deseja excluir?')) {
-            axiosClient.delete(`/constructions/${construction.id}`).then(() => {
+        if (window.confirm('Tem certeza que deseja excluir? Todas os registros de medida dessa obra serão excluídos!')) {
+            deleteConstruction(construction.id).then(() => {
                 setNotification('Obra excluída com sucesso!');
-                getConstructions();
+                fetchConstructions();
             });
         }
     };

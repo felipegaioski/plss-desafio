@@ -8,8 +8,6 @@ export default function Dashboard() {
     useEffect(() => {
         setLoading(true);
         getDashboard().then(({ data }) => {
-            console.log(data);
-            
             setData(data);
             setLoading(false);
         }).then(() => setLoading(false))
