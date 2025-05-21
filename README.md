@@ -37,7 +37,7 @@ Aplicação desenvolvida para teste prático da empresa Plss Soluções.
     - Execute o comando "npm install".
     - Execute o comando "npm run dev" para iniciar o React.
 
-- Um usuário está criado por padrão. Os login é:
+- Um usuário está criado por padrão. O login é:
     - Administrador: email: "admin@admin.com", senha "Admin#123";
 
 ## Informações
