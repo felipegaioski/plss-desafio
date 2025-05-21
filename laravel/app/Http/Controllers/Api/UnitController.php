@@ -6,8 +6,8 @@ use App\Models\Unit;
 use Illuminate\Http\Request;
 use App\Traits\ApiQueryBuilder;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreUnitRequest;
-use App\Http\Requests\UpdateUnitRequest;
+use App\Http\Requests\Units\StoreUnitRequest;
+use App\Http\Requests\Units\UpdateUnitRequest;
 
 class UnitController extends Controller
 {

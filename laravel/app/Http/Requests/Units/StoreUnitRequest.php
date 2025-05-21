@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Units;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateUnitCategoryRequest extends FormRequest
+class StoreUnitRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,6 +23,7 @@ class UpdateUnitCategoryRequest extends FormRequest
     {
         return [
             'name' => 'required',
+            'category_id' => ['required', 'exists:categories,id'],
         ];
     }
 }

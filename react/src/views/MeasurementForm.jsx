@@ -35,7 +35,11 @@ export default function MeasurementForm() {
         setLoading(true);
         getConstruction(constructionId)
             .then(({ data }) => {
-                setConstruction(data.construction);
+                if (data.construction) {
+                    setConstruction(data.construction);
+                } else {
+                    setConstruction(data);
+                }
             })
             .finally(() => setLoading(false));
     }, []);
@@ -122,7 +126,7 @@ export default function MeasurementForm() {
                 <div className="card">
                     <h4>Obra: {construction.name}</h4>
                 </div>
-                {loading && <div className="text-center">Carregando...</div>}
+                {loading && <div className="text-center common-text">Carregando...</div>}
 
                 {errors && (
                     <div className="alert">
@@ -143,7 +147,7 @@ export default function MeasurementForm() {
                                 onChange={(ev) =>
                                     setMeasurement({ ...measurement, amount: ev.target.value })
                                 }
-                                placeholder="Quantidade medida"
+                                placeholder="Medida"
                                 />
                             </Col>
                             <Col md="4">

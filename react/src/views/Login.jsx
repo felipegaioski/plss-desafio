@@ -50,11 +50,11 @@ export default function Login() {
                         </div>
                     ) }
                     <input ref={emailRef} type="email" placeholder="E-mail"/>
-                    <input ref={passwordRef} type="password" placeholder="Senha"/>
-                    <button type="submit" className="btn btn-block">Login</button>
-                    <p className="message">Não possui uma conta?
+                    <input ref={passwordRef} type="password" placeholder="Senha" className="mt-3" />
+                    <button type="submit" className="btn btn-block mt-3">Login</button>
+                    {/* <p className="message">Não possui uma conta?
                         <Link to="/signup"> Cadastre-se</Link>
-                    </p>
+                    </p> */}
                 </form>
             </div>
         </div>

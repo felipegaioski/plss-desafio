@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 use App\Traits\ApiQueryBuilder;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreMeasurementRequest;
-use App\Http\Requests\UpdateMeasurementRequest;
+use App\Http\Requests\Measurements\StoreMeasurementRequest;
+use App\Http\Requests\Measurements\UpdateMeasurementRequest;
 
 class MeasurementController extends Controller
 {
@@ -19,6 +19,26 @@ class MeasurementController extends Controller
         return [
             'construction_id' => function ($query, $key, $input) {
                 return $query->where('construction_id', $input);
+            },
+            'start_date' => function ($query, $key, $input) {
+                return $query->where('measured_at', '>=', $input);
+            },
+            'end_date' => function ($query, $key, $input) {
+                return $query->where('measured_at', '<=', $input);
+            },
+            'category_id' => function ($query, $key, $input) {
+                return $query->whereHas('unit', function ($query) use ($input) {
+                    $query->where('unit_category_id', $input);
+                });
+            },
+            'unit_id' => function ($query, $key, $input) {
+                return $query->where('unit_id', $input);
+            },
+            'min_amount' => function ($query, $key, $input) {
+                return $query->where('amount', '>=', $input);
+            },
+            'max_amount' => function ($query, $key, $input) {
+                return $query->where('amount', '<=', $input);
             },
         ];
     }

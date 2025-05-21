@@ -30,7 +30,7 @@ export default function Audits() {
     return (
         <div>
             <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-                <h1>Auditoria</h1>
+                <h2>Auditoria</h2>
             </div>
             <div className="card animated fadeInDown">
                 <table>
@@ -45,7 +45,7 @@ export default function Audits() {
                     {loading && 
                         <tbody>
                             <tr>
-                                <td colSpan="5" className="text-center">
+                                <td colSpan="5" className="text-center common-text">
                                     <span>Carregando...</span>
                                 </td>
                             </tr>
@@ -68,7 +68,7 @@ export default function Audits() {
                     {!audits.length && !loading &&
                         <tbody>
                             <tr>
-                                <td colSpan="5" className="text-center">
+                                <td colSpan="5" className="text-center common-text">
                                     <span>Nenhuma obra encontrada.</span>
                                 </td>
                             </tr>
@@ -77,8 +77,8 @@ export default function Audits() {
                 </table>
             </div>
             <div className="pagination mt-3 flex justify-center text-center">
-                <button onClick={() => fetchAudits(pagination.currentPage - 1)} disabled={pagination.currentPage === 1}>&laquo;</button>
-                <button onClick={() => fetchAudits(pagination.currentPage + 1)} disabled={pagination.currentPage === pagination.lastPage}>&raquo;</button>
+                <button onClick={() => fetchAudits(pagination.currentPage - 1)} disabled={pagination.currentPage === 1} className="page-arrows">&laquo;</button>
+                <button onClick={() => fetchAudits(pagination.currentPage + 1)} disabled={pagination.currentPage === pagination.lastPage} className="page-arrows">&raquo;</button>
             </div>
         </div>
     );

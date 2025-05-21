@@ -2,18 +2,16 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
+use Tymon\JWTAuth\Contracts\JWTSubject;
+use OwenIt\Auditing\Auditable;
 
-class User extends Authenticatable implements Auditable
+class User extends Authenticatable implements AuditableContract, JWTSubject
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasApiTokens, HasFactory, Notifiable;
-    use \OwenIt\Auditing\Auditable;
+    use HasFactory, Notifiable, Auditable;
 
     /**
      * The attributes that are mass assignable.
@@ -47,5 +45,15 @@ class User extends Authenticatable implements Auditable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return [];
     }
 }

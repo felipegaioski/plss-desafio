@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\UnitCategories;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateConstructionRequest extends FormRequest
+class UpdateUnitCategoryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,8 +22,7 @@ class UpdateConstructionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
-            'description' => 'nullable',
+            'name' => 'required',
         ];
     }
 }

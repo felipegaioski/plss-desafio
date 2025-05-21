@@ -3,14 +3,33 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\User;
+use Illuminate\Http\Request;
+use App\Traits\ApiQueryBuilder;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
-use App\Http\Requests\StoreUserRequest;
-use App\Http\Requests\UpdateUserRequest;
+use App\Http\Requests\Users\StoreUserRequest;
+use App\Http\Requests\Users\UpdateUserRequest;
 
 class UserController extends Controller
 {
+    use ApiQueryBuilder;
+
+    protected function getCustomFilters()
+    {
+        return [
+            'id' => function ($query, $key, $input) {
+                return $query->where('id', $input);
+            },
+            'name' => function ($query, $key, $input) {
+                return $query->where('name', 'like', '%' . $input . '%');
+            },
+            'email' => function ($query, $key, $input) {
+                return $query->where('email', 'like', '%' . $input . '%');
+            },
+        ];
+    }
+    
     /**
      * Display a listing of the resource.
      * @return Illuminate\Http\Resources\Json\AnonymousResourceCollection
@@ -18,6 +37,20 @@ class UserController extends Controller
     public function index()
     {
         return UserResource::collection(User::query()->orderBy('id', 'desc')->paginate(10));
+    }
+
+    public function get(Request $request)
+    {
+        $query = User::query();
+        $query = $this->applyIncludes($query, $request);
+        $query = $this->applyCustomFilters($query, $request);
+        $query = $this->applySorting($query, $request);
+        $users = $query->paginate(10);
+
+        return response()->json([
+            'error' => false,
+            'users' => $users,
+        ], 200);
     }
 
     /**

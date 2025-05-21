@@ -24,7 +24,7 @@ trait ApiQueryBuilder
         $filters = $this->getCustomFilters();
 
         foreach ($request->all() as $key => $value) {
-            if (isset($filters[$key])) {
+            if (isset($filters[$key]) && !empty($value)) {
                 $callback = $filters[$key];
 
                 $input = is_string($value) && $this->isJson($value)

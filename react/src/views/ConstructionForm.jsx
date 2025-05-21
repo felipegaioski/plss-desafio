@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import axiosClient from "../api/axios-client.js";
 import { useStateContext } from "../contexts/ContextProvider.jsx";
 import { getConstruction } from "../services/ConstructionService.js";
+import { storeConstruction, updateConstruction } from '../services/ConstructionService.js';
 
 export default function ConstructionForm() {
     const { id } = useParams();
@@ -14,6 +15,7 @@ export default function ConstructionForm() {
         id: null,
         name: '',
         description: '',
+        address: '',
     });
 
     useEffect(() => {
@@ -21,7 +23,6 @@ export default function ConstructionForm() {
         setLoading(true);
         getConstruction(id, {})
             .then(({ data }) => {
-                console.log(data);
                 if (data.construction) {
                     setConstruction(data.construction);
                 } else {
@@ -38,34 +39,32 @@ export default function ConstructionForm() {
     const onSubmit = (ev) => {
         ev.preventDefault();
 
-        if (construction.id) {
-            axiosClient.put(`/constructions/${construction.id}`, construction).then(({data}) => {
-                setNotification('Obra atualizada com sucesso!');
+        const request = construction.id
+            ? updateConstruction(construction.id, construction)
+            : storeConstruction(construction);
+
+        request
+            .then(({ data }) => {
+                setNotification(
+                    construction.id
+                        ? 'Obra atualizada com sucesso!'
+                        : 'Obra criada com sucesso!'
+                );
                 navigate('/constructions');
-            }).catch(err => {
+            })
+            .catch((err) => {
                 const response = err.response;
                 if (response && response.status === 422) {
                     setErrors(response.data.errors);
                 }
             });
-        } else {
-            axiosClient.post(`/constructions`, construction).then(({data}) => {
-                setNotification('Obra criada com sucesso!');
-                navigate('/constructions');
-            }).catch(err => {
-                const response = err.response;
-                if (response && response.status === 422) {
-                    setErrors(response.data.errors);
-                }
-            });
-        }
-    }
+    };
 
     return (
         <div>
             { construction.id ? <h1>Editando Obra</h1> : <h1>Nova Obra</h1>}
             <div className="card animated fadeInDown">
-                {loading && <div className="text-center">Carregando...</div>}
+                {loading && <div className="text-center common-text">Carregando...</div>}
                 { errors && (
                     <div className="alert">
                         {Object.keys(errors).map(key => (
@@ -79,6 +78,8 @@ export default function ConstructionForm() {
                         <input value={construction.name} onChange={ev => setConstruction({...construction, name: ev.target.value})} type="text" placeholder="Nome"/>
                         <label htmlFor="description"><strong>Descrição</strong></label>
                         <input value={construction.description} onChange={ev => setConstruction({...construction, description: ev.target.value})} type="text" placeholder="Descrição"/>
+                        <label htmlFor="description"><strong>Endereço / Localização</strong></label>
+                        <input value={construction.address} onChange={ev => setConstruction({...construction, address: ev.target.value})} type="text" placeholder="Endereço / Localização"/>
                         <button className="btn mt-3" type="submit">Salvar</button>
                     </form>
                 }

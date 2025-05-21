@@ -6,8 +6,8 @@ use App\Models\UnitCategory;
 use Illuminate\Http\Request;
 use App\Traits\ApiQueryBuilder;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreUnitCategoryRequest;
-use App\Http\Requests\UpdateUnitCategoryRequest;
+use App\Http\Requests\UnitCategories\StoreUnitCategoryRequest;
+use App\Http\Requests\UnitCategories\UpdateUnitCategoryRequest;
 
 class UnitCategoryController extends Controller
 {

@@ -15,11 +15,11 @@ class Construction extends Model implements Auditable
     protected $fillable = [
         'name',
         'description',
-        
+        'address',
     ];
 
-    protected $auditInclude = ['name', 'description'];
-    protected $auditEvents = ['created', 'updated, deleted'];
+    protected $auditInclude = ['name', 'description', 'address'];
+    protected $auditEvents = ['created', 'updated', 'deleted'];
 
     public function measurements()
     {

@@ -59,7 +59,7 @@ export default function UserForm() {
         <div>
             {user.id ? <h1>Editando Usuário</h1> : <h1>Novo Usuário</h1>}
             <div className="card animated fadeInDown">
-                {loading && <div className="text-center">Carregando...</div>}
+                {loading && <div className="text-center common-text">Carregando...</div>}
                 { errors && (
                     <div className="alert">
                         {Object.keys(errors).map(key => (
@@ -77,7 +77,7 @@ export default function UserForm() {
                         <input onChange={ev => setUser({...user, password: ev.target.value})} type="password" placeholder="Senha"/>
                         <label htmlFor="password_confirmation"><strong>Confirma Senha</strong></label>
                         <input onChange={ev => setUser({...user, password_confirmation: ev.target.value})} type="password" placeholder="Confirma Senha"/>
-                        <button className="btn" type="submit">Salvar</button>
+                        <button className="btn mt-3" type="submit">Salvar</button>
                     </form>
                 }
             </div>

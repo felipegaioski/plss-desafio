@@ -8,8 +8,8 @@ use App\Traits\ApiQueryBuilder;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ConstructionResource;
-use App\Http\Requests\StoreConstructionRequest;
-use App\Http\Requests\UpdateConstructionRequest;
+use App\Http\Requests\Constructions\StoreConstructionRequest;
+use App\Http\Requests\Constructions\UpdateConstructionRequest;
 
 class ConstructionController extends Controller
 {
@@ -18,9 +18,12 @@ class ConstructionController extends Controller
     protected function getCustomFilters()
     {
         return [
-            // 'key' => function ($query, $key, $input) {
-
-            // },
+            'id' => function ($query, $key, $input) {
+                return $query->where('id', $input);
+            },
+            'name' => function ($query, $key, $input) {
+                return $query->where('name', 'like', '%' . $input . '%');
+            },
         ];
     }
 

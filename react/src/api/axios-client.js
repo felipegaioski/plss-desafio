@@ -28,63 +28,62 @@ let isRefreshing = false;
 let refreshSubscribers = [];
 
 const axiosClient = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+    baseURL: import.meta.env.VITE_API_URL,
 });
 
 axiosClient.interceptors.request.use((config) => {
-  const token = localStorage.getItem('ACCESS_TOKEN');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
+    const token = localStorage.getItem('ACCESS_TOKEN');
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
 });
 
-// Retry the original request after refresh
 function onRefreshed(token) {
-  refreshSubscribers.map(cb => cb(token));
-  refreshSubscribers = [];
+    refreshSubscribers.map(cb => cb(token));
+    refreshSubscribers = [];
 }
 
 axiosClient.interceptors.response.use(
-  response => response,
-  async error => {
-    const originalRequest = error.config;
+    response => response,
+    async error => {
+        const originalRequest = error.config;
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
+        if (error.response?.status === 401 && !originalRequest._retry) {
+            originalRequest._retry = true;
 
-      if (!isRefreshing) {
-        isRefreshing = true;
+            if (!isRefreshing) {
+                isRefreshing = true;
 
-        try {
-          const response = await axios.post(`${import.meta.env.VITE_API_URL}/refresh`, {}, {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('ACCESS_TOKEN')}`
+                try {
+                    const response = await axios.post(`${import.meta.env.VITE_API_URL}/refresh`, {}, {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem('ACCESS_TOKEN')}`
+                        }
+                    });
+
+                    const newToken = response.data.token;
+                    localStorage.setItem('ACCESS_TOKEN', newToken);
+                    onRefreshed(newToken);
+                } catch (err) {
+                    localStorage.removeItem('ACCESS_TOKEN');
+                    window.location.href = '/login';
+                    return Promise.reject(err);
+                } finally {
+                    isRefreshing = false;
+                }
             }
-          });
 
-          const newToken = response.data.token;
-          localStorage.setItem('ACCESS_TOKEN', newToken);
-          onRefreshed(newToken);
-        } catch (err) {
-          localStorage.removeItem('ACCESS_TOKEN');
-          window.location.href = '/login';
-          return Promise.reject(err);
-        } finally {
-          isRefreshing = false;
+            return new Promise(resolve => {
+                refreshSubscribers.push(token => {
+                    originalRequest.headers.Authorization = `Bearer ${token}`;
+                    resolve(axiosClient(originalRequest));
+                });
+            });
         }
-      }
 
-      return new Promise(resolve => {
-        refreshSubscribers.push(token => {
-          originalRequest.headers.Authorization = `Bearer ${token}`;
-          resolve(axiosClient(originalRequest));
-        });
-      });
+        return Promise.reject(error);
     }
-
-    return Promise.reject(error);
-  }
 );
 
 export default axiosClient;
